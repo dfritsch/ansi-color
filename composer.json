@@ -1,0 +1,12 @@
+{
+    "name": "dfritsch/ansi-color",
+    "version": "0.0.1",
+    "description": "Coloring class for console output",
+    "keywords": ["console","color"],
+    "license": "All Rights Reserved",
+    "autoload": {
+        "psr-0": {
+            "PhpAnsiColor": "src/"
+        }
+    }
+}
