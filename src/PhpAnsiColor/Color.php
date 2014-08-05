@@ -78,4 +78,40 @@ class Color
         );
         return is_null($new_text) ? $full_text : $new_text;
     }
+
+    public static function errorHandler($errno, $errstr, $errfile, $errline)
+    {
+        if (!(error_reporting() & $errno)) {
+            // This error code is not included in error_reporting
+            return;
+        }
+
+        switch ($errno) {
+        case E_USER_ERROR:
+            echo self::set("<b>My ERROR</b> [$errno] $errstr<br />\n" .
+            "  Fatal error on line $errline in file $errfile" .
+            ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br />\n", "red+underline");
+            exit(1);
+            break;
+
+        case E_USER_WARNING:
+            echo self::set("WARNING", "red") . " [$errno] $errstr<br />\n";
+            break;
+
+        case E_USER_NOTICE:
+            echo self::set("NOTICE", "yellow") . " [$errno] $errstr<br />\n";
+            break;
+
+        default:
+            echo self::set("Unknown Error Type:", "yellow+italic") . " [$errno] $errstr<br />\n";
+            break;
+        }
+
+        /* Don't execute PHP internal error handler */
+        return true;
+    }
+
+    public static function setErrorHandler() {
+        set_error_handler(array(self, "errorHandler"));
+    }
 }
