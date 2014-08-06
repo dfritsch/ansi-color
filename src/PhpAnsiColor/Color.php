@@ -58,7 +58,7 @@ class Color
         foreach ($color_attrs as $attr) {
             $ansi_str .= "\033[" . self::$ANSI_CODES[$attr] . "m";
         }
-        $ansi_str .= $str . "\033[" . self::$ANSI_CODES["off"] . "m";
+        $ansi_str .= $str . "\033[" . self::$ANSI_CODES["off"] . "m" . "\n";
         return $ansi_str;
     }
 
@@ -88,22 +88,22 @@ class Color
 
         switch ($errno) {
         case E_USER_ERROR:
-            echo self::set("<b>My ERROR</b> [$errno] $errstr<br />\n" .
+            echo self::set("<b>My ERROR</b> [$errno] $errstr\n" .
             "  Fatal error on line $errline in file $errfile" .
-            ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br />\n", "red+underline");
+            ", PHP " . PHP_VERSION . " (" . PHP_OS . ")\n", "red+underline");
             exit(1);
             break;
 
         case E_USER_WARNING:
-            echo self::set("WARNING", "red") . " [$errno] $errstr<br />\n";
+            echo self::set("WARNING", "red") . " [$errno] $errstr\n($errline) $errfile\n";
             break;
 
         case E_USER_NOTICE:
-            echo self::set("NOTICE", "yellow") . " [$errno] $errstr<br />\n";
+            echo self::set("NOTICE", "yellow") . " [$errno] $errstr\n($errline) $errfile\n";
             break;
 
         default:
-            echo self::set("Unknown Error Type:", "yellow+italic") . " [$errno] $errstr<br />\n";
+            echo self::set("Unknown Error Type:", "yellow+italic") . " [$errno] $errstr\n($errline) $errfile\n";
             break;
         }
 
@@ -112,6 +112,6 @@ class Color
     }
 
     public static function setErrorHandler() {
-        set_error_handler(array(self, "errorHandler"));
+        set_error_handler(array(self::CLASS, "errorHandler"));
     }
 }
